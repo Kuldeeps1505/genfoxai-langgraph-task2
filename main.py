@@ -25,17 +25,13 @@ class GraphState(TypedDict):     # Graph State Definition
 
 
 # LLM Initialization
-
 llm = ChatOpenAI(
     model="gpt-4o-mini",
     temperature=0.6,  
     api_key=os.getenv("OPENAI_API_KEY"),
 )
 
-
-
 # Genre Extraction
-
 def extract_genre(text: str) -> Literal["Drama", "Thriller", "Comedy"]:
     normalized = text.strip().lower()
 
@@ -52,7 +48,6 @@ def extract_genre(text: str) -> Literal["Drama", "Thriller", "Comedy"]:
 
 
 # Score Extraction
-
 def extract_scores(text: str) -> tuple[float, float]:
     """Extract story and character scores from LLM response."""
     try:
@@ -74,7 +69,6 @@ def extract_scores(text: str) -> tuple[float, float]:
 
 
 # Genre Classifier Node
-
 def genre_classifier(state: GraphState) -> GraphState:
     synopsis = state["synopsis"]
 
@@ -106,7 +100,6 @@ Synopsis:
 
 
 # Drama Evaluator Node
-
 def drama_evaluator(state: GraphState) -> GraphState:
     synopsis = state["synopsis"]
 
@@ -140,7 +133,6 @@ Synopsis:
 
 
 # Thriller Evaluator node
-
 def thriller_evaluator(state: GraphState) -> GraphState:
     synopsis = state["synopsis"]
 
@@ -174,7 +166,6 @@ Synopsis:
 
 
 #  Comedy Evaluator node
-
 def comedy_evaluator(state: GraphState) -> GraphState:
     synopsis = state["synopsis"]
 
@@ -208,7 +199,6 @@ Synopsis:
 
 
 # Aggregator node
-
 def aggregator(state: GraphState) -> GraphState:
     story = state["story_score"]
     character = state["character_score"]
@@ -248,7 +238,6 @@ def aggregator(state: GraphState) -> GraphState:
 
 
 # Conditional Routing Logic (Graph-Level)
-
 def route_by_genre(state: GraphState) -> str:
     """Route to genre-specific evaluator based on classified genre."""
     if state["genre"] == "Drama":
@@ -263,7 +252,6 @@ def route_by_genre(state: GraphState) -> str:
 
 
 # Graph Construction
-
 workflow = StateGraph(GraphState)
 
 workflow.add_node("classifier", genre_classifier)
@@ -310,7 +298,6 @@ if __name__ == "__main__":
     result = graph.invoke(initial_state)
 
     # structured output
-    
     print("MOVIE SYNOPSIS EVALUATION RESULT")
     
     output = {
@@ -322,4 +309,5 @@ if __name__ == "__main__":
     }
     print(json.dumps(output, indent=2))
     
+
 
